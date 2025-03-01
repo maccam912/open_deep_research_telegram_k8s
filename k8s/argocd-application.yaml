@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: open-deep-research
+  namespace: argocd  # The namespace where ArgoCD is installed
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/YOUR_USERNAME/open_deep_research_telegram_k8s.git  # Replace with your repo URL
+    targetRevision: HEAD
+    path: k8s  # Path to the kubernetes manifests in your repo
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: open-deep-research  # Target namespace for deployment
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

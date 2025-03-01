@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-deep-research
+  labels:
+    app: open-deep-research
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-deep-research
+  template:
+    metadata:
+      labels:
+        app: open-deep-research
+    spec:
+      containers:
+      - name: open-deep-research
+        image: ghcr.io/USER_REPO/open-deep-research:latest
+        # Replace USER_REPO with your GitHub username/repo
+        args: ["What topics are trending in AI research?"]  # Default query, can be overridden
+        resources:
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+        # If the research agent needs persistent storage for caching results
+        volumeMounts:
+        - name: research-cache
+          mountPath: /app/open_deep_research/cache
+      volumes:
+      - name: research-cache
+        emptyDir: {}
+      # If you need to pull from private registry
+      # imagePullSecrets:
+      # - name: github-container-registry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: open-deep-research
+spec:
+  selector:
+    app: open-deep-research
+  ports:
+  - port: 8000
+    targetPort: 8000  # Assuming the container exposes port 8000
+  type: ClusterIP
