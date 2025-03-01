@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/YOUR_USERNAME/open_deep_research_telegram_k8s.git  # Replace with your repo URL
+    repoURL: https://github.com/maccam912/open_deep_research_telegram_k8s.git  # Replace with your repo URL
     targetRevision: HEAD
     path: k8s  # Path to the kubernetes manifests in your repo
   destination:
