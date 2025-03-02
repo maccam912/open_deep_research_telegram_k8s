@@ -16,6 +16,8 @@ spec:
         image: ghcr.io/maccam912/open_deep_research_telegram_k8s/open-deep-research:latest
         args: ["QUERY_PLACEHOLDER"]  # This will be dynamically replaced
         env:
+        - name: MODEL_ID
+          value: "deepseek/deepseek-r1"
         - name: HF_TOKEN
           valueFrom:
             secretKeyRef:
