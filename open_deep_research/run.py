@@ -89,7 +89,7 @@ def create_agent():
     }
     model = OpenAIServerModel(
         model_id="deepseek/deepseek-r1-distill-llama-70b:free",
-        base_url="https://openrouter.ai/api/v1",
+        api_base="https://openrouter.ai/api/v1",
         api_key=os.getenv("OPENROUTER_API_KEY"),
         **model_params,
     )
