@@ -23,6 +23,9 @@ except config.ConfigException:
 k8s_batch_api = client.BatchV1Api()
 k8s_core_api = client.CoreV1Api()
 
+# Define the namespace to use for all Kubernetes operations
+K8S_NAMESPACE = "opendeepresearch"
+
 # Dictionary to keep track of jobs and their corresponding chat_ids
 active_jobs = {}
 
@@ -109,7 +112,7 @@ def create_job(query: str, chat_id: int) -> str:
     # Create the job in Kubernetes
     k8s_batch_api.create_namespaced_job(
         body=job,
-        namespace="default"
+        namespace=K8S_NAMESPACE
     )
     
     logger.info(f"Created job {job_name} for chat_id {chat_id}")
@@ -121,7 +124,7 @@ async def check_job_status():
     
     for job_name, job_info in active_jobs.items():
         try:
-            job = k8s_batch_api.read_namespaced_job(job_name, "default")
+            job = k8s_batch_api.read_namespaced_job(job_name, K8S_NAMESPACE)
             
             if job.status.succeeded:
                 # Job completed successfully
@@ -130,7 +133,7 @@ async def check_job_status():
                 # Get pod associated with this job
                 pod_label_selector = f"job-name={job_name}"
                 pods = k8s_core_api.list_namespaced_pod(
-                    namespace="default", 
+                    namespace=K8S_NAMESPACE, 
                     label_selector=pod_label_selector
                 )
                 
@@ -140,7 +143,7 @@ async def check_job_status():
                     # Get logs from the pod
                     logs = k8s_core_api.read_namespaced_pod_log(
                         name=pod_name,
-                        namespace="default"
+                        namespace=K8S_NAMESPACE
                     )
                     
                     # Extract the answer from logs
