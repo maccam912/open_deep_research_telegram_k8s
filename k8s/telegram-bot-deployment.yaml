@@ -59,17 +59,29 @@ spec:
           requests:
             cpu: "200m"
             memory: "256Mi"
-        livenessProbe:
-          exec:
-            command:
-            - /bin/sh
-            - -c
-            - 'if [ $(( $(date +%s) - $(stat -c %Y /proc/1) )) -gt 1800 ]; then exit 1; fi'
-          initialDelaySeconds: 30
-          periodSeconds: 30
         env:
         - name: TELEGRAM_BOT_TOKEN
           valueFrom:
             secretKeyRef:
               name: telegram-bot-secrets
               key: bot-token
+---
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: telegram-bot-restart
+  namespace: opendeepresearch
+spec:
+  schedule: "*/30 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: telegram-bot-restart
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            - kubectl delete pod -l app=telegram-bot -n opendeepresearch
+          restartPolicy: OnFailure
