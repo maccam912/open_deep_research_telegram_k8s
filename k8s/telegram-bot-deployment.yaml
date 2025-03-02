@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: telegram-bot
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: job-manager
+rules:
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "watch", "create", "delete"]
+- apiGroups: [""]
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: telegram-bot-job-manager
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: telegram-bot
+  namespace: default
+roleRef:
+  kind: Role
+  name: job-manager
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telegram-bot
+  labels:
+    app: telegram-bot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegram-bot
+  template:
+    metadata:
+      labels:
+        app: telegram-bot
+    spec:
+      serviceAccountName: telegram-bot
+      containers:
+      - name: telegram-bot
+        image: ghcr.io/maccam912/open_deep_research_telegram_k8s/telegram-bot:latest
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+        env:
+        - name: TELEGRAM_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: telegram-bot-secrets
+              key: bot-token
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: telegram-bot-secrets
+type: Opaque
+data:
+  # You need to replace this with your actual Telegram bot token encoded in base64
+  # Use: echo -n 'your-token' | base64
+  bot-token: YOUR_BASE64_ENCODED_TOKEN_HERE
