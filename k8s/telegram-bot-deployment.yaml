@@ -59,6 +59,14 @@ spec:
           requests:
             cpu: "200m"
             memory: "256Mi"
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - 'if [ $(( $(date +%s) - $(stat -c %Y /proc/1) )) -gt 1800 ]; then exit 1; fi'
+          initialDelaySeconds: 30
+          periodSeconds: 30
         env:
         - name: TELEGRAM_BOT_TOKEN
           valueFrom:
