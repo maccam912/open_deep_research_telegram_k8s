@@ -65,14 +65,3 @@ spec:
             secretKeyRef:
               name: telegram-bot-secrets
               key: bot-token
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: telegram-bot-secrets
-  namespace: opendeepresearch
-type: Opaque
-data:
-  # You need to replace this with your actual Telegram bot token encoded in base64
-  # Use: echo -n 'your-token' | base64
-  bot-token: YOUR_BASE64_ENCODED_TOKEN_HERE
