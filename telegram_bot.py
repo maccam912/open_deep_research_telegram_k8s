@@ -229,7 +229,7 @@ async def process_message(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     
     try:
         # Create a Kubernetes job
-        job_name = create_job(query, chat_id)
+        job_name = create_job(query + "\nAlways cite sources used to answer the question with links to sources.", chat_id)
         
         # Add job to tracking
         active_jobs[job_name] = {
