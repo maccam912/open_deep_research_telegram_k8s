@@ -65,23 +65,3 @@ spec:
             secretKeyRef:
               name: telegram-bot-secrets
               key: bot-token
----
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: telegram-bot-restart
-  namespace: opendeepresearch
-spec:
-  schedule: "*/30 * * * *"
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - name: telegram-bot-restart
-            image: bitnami/kubectl:latest
-            command:
-            - /bin/sh
-            - -c
-            - kubectl delete pod -l app=telegram-bot -n opendeepresearch
-          restartPolicy: OnFailure
