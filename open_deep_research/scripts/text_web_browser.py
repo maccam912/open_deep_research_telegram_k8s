@@ -11,7 +11,6 @@ from urllib.parse import unquote, urljoin, urlparse
 
 import pathvalidate
 import requests
-from serpapi import GoogleSearch
 
 from smolagents import Tool
 
@@ -200,30 +199,6 @@ class SimpleTextBrowser:
                 end_idx += 1
             self.viewport_pages.append((start_idx, end_idx))
             start_idx = end_idx
-
-    def _serpapi_search(self, query: str, filter_year: Optional[int] = None) -> None:
-        if self.serpapi_key is None:
-            raise ValueError("Missing SerpAPI key.")
-
-        params = {
-            "engine": "google",
-            "q": query,
-            "api_key": self.serpapi_key,
-        }
-        if filter_year is not None:
-            params["tbs"] = f"cdr:1,cd_min:01/01/{filter_year},cd_max:12/31/{filter_year}"
-
-        search = GoogleSearch(params)
-        results = search.get_dict()
-        self.page_title = f"{query} - Search"
-        if "organic_results" not in results.keys():
-            raise Exception(f"No results found for query: '{query}'. Use a less specific query.")
-        if len(results["organic_results"]) == 0:
-            year_filter_message = f" with filter year={filter_year}" if filter_year is not None else ""
-            self._set_page_content(
-                f"No results found for '{query}'{year_filter_message}. Try with a more general query, or remove the year filter."
-            )
-            return
 
         def _prev_visit(url):
             for i in range(len(self.history) - 1, -1, -1):
