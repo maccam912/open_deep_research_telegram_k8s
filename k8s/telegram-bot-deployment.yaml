@@ -66,7 +66,7 @@ spec:
               name: telegram-bot-secrets
               key: bot-token
 ---
-apiVersion: v1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: telegram-bot-restart
