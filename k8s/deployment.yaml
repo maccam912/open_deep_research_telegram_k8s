@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: open-deep-research
-        image: ghcr.io/maccam912/open-deep-research:latest
+        image: ghcr.io/maccam912/open_deep_research_telegram_k8s/open_deep_research_telegram_k8s:latest
         args: ["What topics are trending in AI research?"]  # Default query, can be overridden
         resources:
           limits:
