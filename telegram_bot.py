@@ -155,12 +155,32 @@ async def check_job_status():
                     if "Got this answer:" in answer:
                         answer = answer.split("Got this answer:", 1)[1].strip()
                     
+                    # Delete the processing message
+                    if "processing_message_id" in job_info:
+                        try:
+                            await job_info["bot"].delete_message(
+                                chat_id=chat_id,
+                                message_id=job_info["processing_message_id"]
+                            )
+                        except Exception as e:
+                            logger.error(f"Error deleting processing message: {e}")
+                    
                     # Send the result back to the user
                     await job_info["bot"].send_message(
                         chat_id=chat_id, 
                         text=f"Research result: {answer}"
                     )
                 else:
+                    # Delete the processing message
+                    if "processing_message_id" in job_info:
+                        try:
+                            await job_info["bot"].delete_message(
+                                chat_id=chat_id,
+                                message_id=job_info["processing_message_id"]
+                            )
+                        except Exception as e:
+                            logger.error(f"Error deleting processing message: {e}")
+                            
                     await job_info["bot"].send_message(
                         chat_id=chat_id, 
                         text="Could not retrieve research results. Please try again."
@@ -171,6 +191,17 @@ async def check_job_status():
             elif job.status.failed:
                 # Job failed
                 chat_id = job_info["chat_id"]
+                
+                # Delete the processing message
+                if "processing_message_id" in job_info:
+                    try:
+                        await job_info["bot"].delete_message(
+                            chat_id=chat_id,
+                            message_id=job_info["processing_message_id"]
+                        )
+                    except Exception as e:
+                        logger.error(f"Error deleting processing message: {e}")
+                
                 await job_info["bot"].send_message(
                     chat_id=chat_id, 
                     text="Sorry, the research job failed. Please try again later."
@@ -194,7 +225,7 @@ async def process_message(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     chat_id = update.effective_chat.id
     
     # Let the user know we're processing
-    await update.message.reply_text("Processing your research query... This may take a few minutes.")
+    processing_message = await update.message.reply_text("Processing your research query... This may take a few minutes.")
     
     try:
         # Create a Kubernetes job
@@ -205,7 +236,8 @@ async def process_message(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             "chat_id": chat_id,
             "query": query,
             "timestamp": datetime.now(),
-            "bot": context.bot
+            "bot": context.bot,
+            "processing_message_id": processing_message.message_id
         }
         
         logger.info(f"Added job {job_name} to tracking for chat_id {chat_id}")
