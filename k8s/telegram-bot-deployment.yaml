@@ -2,12 +2,12 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: telegram-bot
-  namespace: default
+  namespace: opendeepresearch
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  namespace: default
+  namespace: opendeepresearch
   name: job-manager
 rules:
 - apiGroups: ["batch"]
@@ -21,11 +21,11 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: telegram-bot-job-manager
-  namespace: default
+  namespace: opendeepresearch
 subjects:
 - kind: ServiceAccount
   name: telegram-bot
-  namespace: default
+  namespace: opendeepresearch
 roleRef:
   kind: Role
   name: job-manager
@@ -37,6 +37,7 @@ metadata:
   name: telegram-bot
   labels:
     app: telegram-bot
+  namespace: opendeepresearch
 spec:
   replicas: 1
   selector:
@@ -69,6 +70,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: telegram-bot-secrets
+  namespace: opendeepresearch
 type: Opaque
 data:
   # You need to replace this with your actual Telegram bot token encoded in base64
