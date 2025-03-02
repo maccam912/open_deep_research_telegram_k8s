@@ -72,6 +72,10 @@ def create_job(query: str, chat_id: int) -> str:
                             "args": [query],
                             "env": [
                                 {
+                                    "name": "MODEL_ID",
+                                    "value": "google/gemini-2.0-flash-lite-001",
+                                },
+                                {
                                     "name": "HF_TOKEN",
                                     "valueFrom": {
                                         "secretKeyRef": {
