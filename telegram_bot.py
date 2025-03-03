@@ -73,7 +73,8 @@ def create_job(query: str, chat_id: int) -> str:
                             "env": [
                                 {
                                     "name": "MODEL_ID",
-                                    "value": "google/gemini-2.0-flash-lite-001",
+                                    # "value": "google/gemini-2.0-flash-lite-001",
+                                    "value": "deepseek/deepseek-chat",
                                 },
                                 {
                                     "name": "HF_TOKEN",
