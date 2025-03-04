@@ -71,10 +71,10 @@ def create_job(query: str, chat_id: int) -> str:
                             "image": "ghcr.io/maccam912/open_deep_research_telegram_k8s/open-deep-research:latest",
                             "args": [query],
                             "env": [
-                                # {
-                                #     "name": "MODEL_ID",
-                                #     "value": "qwen/qwen-2.5-coder-32b-instruct",
-                                # },
+                                {
+                                    "name": "MODEL_ID",
+                                    "value": os.getenv("MODEL_ID", "google/gemini-2.0-flash-001")
+                                },
                                 {
                                     "name": "HF_TOKEN",
                                     "valueFrom": {
