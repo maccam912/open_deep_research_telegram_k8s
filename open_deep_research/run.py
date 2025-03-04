@@ -88,9 +88,9 @@ def create_agent():
         "max_completion_tokens": 8192,
     }
     model = OpenAIServerModel(
-        model_id=os.getenv("MODEL_ID", "deepseek/deepseek-r1-distill-llama-70b:free"),
-        #api_base="https://openrouter.ai/api/v1",
-        api_base="http://192.168.68.63:8080",
+        model_id=os.getenv("MODEL_ID", "qwen/qwen-2.5-coder-32b-instruct:floor"),
+        api_base="https://openrouter.ai/api/v1",
+        # api_base="http://192.168.68.63:8080",
         api_key=os.getenv("OPENROUTER_API_KEY"),
         **model_params,
     )
