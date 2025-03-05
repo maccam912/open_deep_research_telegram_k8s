@@ -68,7 +68,8 @@ def create_job(query: str, chat_id: int) -> str:
                     "containers": [
                         {
                             "name": "open-deep-research",
-                            "image": "ghcr.io/maccam912/open_deep_research_telegram_k8s/open-deep-research:latest",
+                            # "image": "ghcr.io/maccam912/open_deep_research_telegram_k8s/open-deep-research:latest",
+                            "image": "ghcr.io/maccam912/browser-use-agent:latest",
                             "args": [query],
                             "env": [
                                 {
