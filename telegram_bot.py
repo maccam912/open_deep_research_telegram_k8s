@@ -93,6 +93,24 @@ def create_job(query: str, chat_id: int) -> str:
                                             "key": "openrouter-api-key"
                                         }
                                     }
+                                },
+                                {
+                                    "name": "PICKNSAVE_EMAIL",
+                                    "valueFrom": {
+                                        "secretKeyRef": {
+                                            "name": "picknsave-credentials",
+                                            "key": "email"
+                                        }
+                                    }
+                                },
+                                {
+                                    "name": "PICKNSAVE_PASSWORD",
+                                    "valueFrom": {
+                                        "secretKeyRef": {
+                                            "name": "picknsave-credentials",
+                                            "key": "password"
+                                        }
+                                    }
                                 }
                             ],
                             "resources": {
