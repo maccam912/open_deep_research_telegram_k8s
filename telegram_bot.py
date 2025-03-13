@@ -74,7 +74,7 @@ def create_job(query: str, chat_id: int) -> str:
                             "env": [
                                 {
                                     "name": "MODEL_ID",
-                                    "value": os.getenv("MODEL_ID", "google/gemini-2.0-flash-001")
+                                    "value": os.getenv("MODEL_ID", "openai/gpt-4o-mini")
                                 },
                                 {
                                     "name": "HF_TOKEN",
