@@ -17,7 +17,7 @@ spec:
         args: ["QUERY_PLACEHOLDER"]  # This will be dynamically replaced
         env:
         - name: MODEL_ID
-          value: "deepseek/deepseek-r1"
+          value: "mistralai/mistral-small-3.1-24b-instruct-2503"
         - name: HF_TOKEN
           valueFrom:
             secretKeyRef:

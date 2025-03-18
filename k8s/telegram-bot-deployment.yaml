@@ -60,6 +60,8 @@ spec:
             cpu: "200m"
             memory: "256Mi"
         env:
+        - name: MODEL_ID
+          value: "mistralai/mistral-small-3.1-24b-instruct-2503"
         - name: TELEGRAM_BOT_TOKEN
           valueFrom:
             secretKeyRef:
